@@ -1,0 +1,87 @@
+#+TITLE: Shell Configuration
+
+bash 的配置主要有 =.bashrc=, =.bash_profile=, =.bash_logout= 三个文件,
+=.bash_profile= 用于 *login* shell, 在用户登录的时候调用, 而 =.bashrc=
+则是用于 *interactive* shell, 即从标准输入读取命令. 利用 =putty= 或者 =xterm=
+远程登录的终端既是 login shell, 也是 interactive shell; 而通常从图形界面启动的
+terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile=
+在用户登录的时候已经读取过了)
+
+但是 Mac OS 的 terminal 是个例外, 因为在用户登录的时候并不加载 =.bash_profile=, 所以
+启动 terminal 时候只会加载 =.bash_profile=, 而不是 =.bashrc=.
+
+所以为了保持一致, 可以让 =.bash_profile= 加载 =~/.bashrc= 的内容.
+
+#+BEGIN_SRC shell :exports code :tangle ~/.bash_profile
+  [[ -f ~/.bashrc ]] && . ~/.bashrc
+#+END_SRC
+
+** Builtin Commands
+
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  # colorful output
+  alias ls='ls --color=always'
+  alias grep='grep --color=always'
+  alias less='less -r'
+
+  # charset for less
+  export LESSCHARSET=utf-8
+
+  # bash prompt
+  PS1='[\u@\h \W]\$ '
+
+  # history
+  HISTSIZE=10000
+#+END_SRC
+
+
+** PATH and environment variables
+
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  # git
+  export GIT_TERMINAL_PROMPT=1
+  # go
+  export GOPATH=~/go
+  [[ ! -d "$GOPATH" ]] && mkdir $GOPATH
+  # ruby
+  export GEM_HOME=$(ruby -e 'puts Gem.user_dir')
+  # gpg
+  export GPG_TTY=$(tty)
+  # python env
+  export WORK_HOME=~/pythonenvs
+  [[ ! -d "$WORK_HOME" ]] && mkdir $WORK_HOME
+  # PATH
+  export PATH="~/bin:~/.local/bin:$GOPATH/bin:$GEM_HOME/bin:$PATH"
+#+END_SRC
+
+** Clipboard
+
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  alias clipboard='xclip -selection clipboard'
+  alias Co='clipboard -o'
+  alias Ci='clipboard -i'
+#+END_SRC
+
+** autojump
+
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  [[ -f /etc/profile.d/autojump.bash ]] && source /etc/profile.d/autojump.bash
+#+END_SRC
+
+** Xorg 设置
+
+使用 =fcitx= 作为输入法
+
+#+BEGIN_SRC shell :tangle ~/.xprofile
+  export GTK_IM_MODULE=fcitx
+  export XMODIFIERS=@im=fcitx
+  export QT_IM_MODULE=fcitx
+#+END_SRC
+
+设置右 =ALT= 键为 =CTRL=
+
+#+BEGIN_SRC shell :tangle ~/.Xmodmap
+  remove Mod1 = Alt_R
+  keycode 108 = Control_R
+  add Control = Control_R
+#+END_SRC
