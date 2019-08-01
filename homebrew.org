@@ -1,0 +1,18 @@
+#+TITLE: Homebrew Configuration
+
+** 镜像
+
+#+BEGIN_SRC shell
+  git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+  git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+  git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+  brew update
+#+END_SRC
+
+#+RESULTS:
+: Already up-to-date.
+
+设置二进制包的源:
+#+BEGIN_SRC shell
+  [[ -z $HOMEBREW_BOTTLE_DOMAIN ]] && echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bashrc && . ~/.bashrc
+#+END_SRC
