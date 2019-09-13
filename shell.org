@@ -78,10 +78,8 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
   export QT_IM_MODULE=fcitx
 #+END_SRC
 
-设置右 =ALT= 键为 =CTRL=
+自定义键盘
 
-#+BEGIN_SRC shell :tangle ~/.Xmodmap
-  remove Mod1 = Alt_R
-  keycode 108 = Control_R
-  add Control = Control_R
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  xkbcomp -w 0 ~/dotfiles/custom.keymap
 #+END_SRC
