@@ -81,5 +81,5 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
 自定义键盘
 
 #+BEGIN_SRC shell :tangle ~/.bashrc
-  xkbcomp -w 0 ~/dotfiles/custom.keymap
+  xkbcomp -w 0 ~/dotfiles/custom.keymap $DISPLAY
 #+END_SRC
