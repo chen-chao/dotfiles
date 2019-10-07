@@ -19,11 +19,6 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
 ** Builtin Commands
 
 #+BEGIN_SRC shell :tangle ~/.bashrc
-  # colorful output
-  alias ls='ls --color=always'
-  alias grep='grep --color=always'
-  alias less='less -r'
-
   # charset for less
   export LESSCHARSET=utf-8
 
@@ -31,7 +26,7 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
   PS1='[\u@\h \W]\$ '
 
   # history
-  HISTSIZE=10000
+  HISTSIZE=50000
 #+END_SRC
 
 
@@ -48,8 +43,8 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
   # gpg
   export GPG_TTY=$(tty)
   # python env
-  export WORK_HOME=~/pythonenvs
-  [[ ! -d "$WORK_HOME" ]] && mkdir $WORK_HOME
+  export WORKON_HOME=~/.virtualenvs
+  [[ ! -d "$WORKON_HOME" ]] && mkdir $WORKON_HOME
   # PATH
   export PATH="~/bin:~/.local/bin:$GOPATH/bin:$GEM_HOME/bin:$PATH"
 #+END_SRC
@@ -64,11 +59,15 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
 
 ** autojump
 
-#+BEGIN_SRC shell :tangle ~/.bashrc
+#+BEGIN_SRC shell :tangle (when (eq system-type 'gnu/linux) "~/.bashrc")
   [[ -f /etc/profile.d/autojump.bash ]] && source /etc/profile.d/autojump.bash
 #+END_SRC
 
-** Xorg 设置
+#+BEGIN_SRC shell :tangle (when (eq system-type 'darwin) "~/.bashrc")
+  [[ -f $(brew --prefix)/etc/profile.d/autojump.sh ]] && source $(brew --prefix)/etc/profile.d/autojump.sh
+#+END_SRC
+
+** Xorg
 
 使用 =fcitx= 作为输入法
 
@@ -82,4 +81,35 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
 
 #+BEGIN_SRC shell :tangle ~/.bashrc
   xkbcomp -w 0 ~/dotfiles/custom.keymap $DISPLAY
+#+END_SRC
+
+** Utilities
+
+#+BEGIN_SRC shell :tangle ~/.bashrc
+  # looping until command done(ensure the command will finish for some reason).
+  # TODO: add timeout option
+  function loopuntil {
+      until $@
+      do
+	  echo "Retry..."
+	  sleep 1
+      done
+  }
+
+  function enableproxy {
+      export http_proxy=${1-socks5://127.0.0.1:1080}
+      export https_proxy=${1-socks5://127.0.0.1:1080}
+  }
+
+  function disableproxy {
+      export http_proxy=
+      export https_proxy=
+  }
+#+END_SRC
+
+
+** Homebrew
+
+#+BEGIN_SRC shell :tangle (when (eq system-type 'darwin) "~/.bashrc")
+  export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 #+END_SRC
