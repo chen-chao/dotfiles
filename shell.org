@@ -49,22 +49,26 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
   export PATH="~/bin:~/.local/bin:$GOPATH/bin:$GEM_HOME/bin:$PATH"
 #+END_SRC
 
-** Clipboard
-
-#+BEGIN_SRC shell :tangle ~/.bashrc
-  alias clipboard='xclip -selection clipboard'
-  alias Co='clipboard -o'
-  alias Ci='clipboard -i'
-#+END_SRC
-
-** autojump
+** Sources
 
 #+BEGIN_SRC shell :tangle (when (eq system-type 'gnu/linux) "~/.bashrc")
+  # virtualenvwrapper
+  source /usr/bin/virtualenvwrapper.sh
+  # autojump
   [[ -f /etc/profile.d/autojump.bash ]] && source /etc/profile.d/autojump.bash
+  # see /usr/share/bash-completion/completions for more completions
 #+END_SRC
 
 #+BEGIN_SRC shell :tangle (when (eq system-type 'darwin) "~/.bashrc")
   [[ -f $(brew --prefix)/etc/profile.d/autojump.sh ]] && source $(brew --prefix)/etc/profile.d/autojump.sh
+#+END_SRC
+
+** Clipboard
+
+#+BEGIN_SRC shell :tangle (when (eq system-type 'gnu/linux) "~/.bashrc")
+  alias clipboard='xclip -selection clipboard'
+  alias Co='clipboard -o'
+  alias Ci='clipboard -i'
 #+END_SRC
 
 ** Xorg
@@ -79,8 +83,8 @@ terminal 都是 interactive shell, 只会读取 =.bashrc=.(因为 =.bash_profile
 
 自定义键盘
 
-#+BEGIN_SRC shell :tangle ~/.bashrc
-  xkbcomp -w 0 ~/dotfiles/custom.keymap $DISPLAY
+#+BEGIN_SRC shell :tangle (when (eq system-type 'darwin) "~/.bashrc")
+  test -f ~/dotfiles/custom.keymap && xkbcomp -w 0 ~/dotfiles/custom.keymap $DISPLAY
 #+END_SRC
 
 ** Utilities
